@@ -276,7 +276,7 @@ Dentro de la carpeta de tu proyecto (`mi-primera-app`), ejecuta:
   yarn dev
   ```
 
-Esto iniciará el servidor de desarrollo de Vite. Abrirá automáticamente tu aplicación en el navegador (normalmente en `http://localhost:3000` o un puerto similar). ¡Lo mejor de Vite es que los cambios que hagas en el código se reflejarán casi instantáneamente en el navegador gracias al Hot Module Replacement (HMR)!
+Esto iniciará el servidor de desarrollo de Vite. Abrirá automáticamente tu aplicación en el navegador (normalmente en `http://localhost:5173` o un puerto similar). ¡Lo mejor de Vite es que los cambios que hagas en el código se reflejarán casi instantáneamente en el navegador gracias al Hot Module Replacement (HMR)!
 
 ## Próximos Pasos
 
