@@ -11,7 +11,7 @@
 3.  [Prerrequisitos](#prerrequisitos)
 4.  [Configuración del Entorno](#configuración-del-entorno)
 5.  [Creando tu Primera Aplicación React (con Vite)](#creando-tu-primera-aplicación-react-con-vite)
-6.  [Estructura Básica del Proyecto](#estructura-básica-del-proyecto)
+6.  [Estructura Básica del Proyecto (Vite con React)](#estructura-básica-del-proyecto-vite-con-react)
 7.  [Conceptos Fundamentales](#conceptos-fundamentales)
     * [JSX](#jsx)
     * [Componentes](#componentes)
@@ -113,3 +113,192 @@ La forma más rápida y moderna de iniciar un nuevo proyecto React es usando **V
 ## Estructura Básica del Proyecto (Vite con React)
 
 Dentro de `mi-primera-app`, encontrarás una estructura similar a esta:
+
+```bash
+
+mi-primera-app/
+├── node_modules/       # Dependencias instaladas por npm/yarn
+├── public/             # Archivos estáticos (imágenes, fuentes, etc.)
+│   └── vite.svg        # Ejemplo de archivo estático
+├── src/                # El código fuente de tu aplicación
+│   ├── assets/         # Otros assets como CSS globales o imágenes usadas en componentes
+│   │   └── react.svg
+│   ├── App.css         # Estilos para el componente App
+│   ├── App.jsx         # El componente principal de tu aplicación (JSX)
+│   ├── index.css       # Estilos globales
+│   └── main.jsx        # Punto de entrada de la aplicación React (Renderiza &lt;App /> en el DOM)
+├── .eslintrc.cjs       # Configuración de ESLint (linter de código)
+├── .gitignore          # Archivos/carpetas a ignorar por Git
+├── index.html          # El archivo HTML principal (Vite inyecta tu app aquí)
+├── package.json        # Información del proyecto, dependencias y scripts
+├── vite.config.js      # Archivo de configuración de Vite
+└── README.md           # Información sobre el proyecto
+
+```
+* **`src/main.jsx`**: Es el punto de entrada. Aquí se importa `App` y se usa `ReactDOM.createRoot().render()` para montar la aplicación en el `div#root` del `index.html`.
+* **`src/App.jsx`**: Es el componente raíz de tu aplicación. Aquí empezarás a construir tu UI.
+* **`public/`**: Los archivos aquí se sirven tal cual. `index.html` es la plantilla base.
+* **`package.json`**: Define las dependencias y los scripts (`npm run dev`, `npm run build`, etc.).
+
+---
+
+## Conceptos Fundamentales
+
+### JSX
+
+JSX (JavaScript XML) es una extensión de sintaxis que te permite escribir estructuras similares a HTML dentro de tu código JavaScript. No es HTML real, sino "azúcar sintáctico" que se transpila (convierte) a llamadas de funciones de JavaScript (`React.createElement`).
+
+```jsx
+// Esto es JSX
+const elemento = <h1>Hola, Mundo React!</h1>;
+
+// Se transpila aproximadamente a esto:
+const elementoJS = React.createElement('h1', null, 'Hola, Mundo React!');
+```
+### Características clave de JSX:
+
+* Puedes incrustar expresiones JavaScript usando llaves `{}`
+
+  ```jsx
+  const nombre = "Usuario";
+  const elemento = <h1>Hola, {nombre}!</h1>; // Renderiza: Hola, Usuario!
+  ```
+## Componentes
+Los componentes son los bloques de construcción de una aplicación React. Son funciones o clases (aunque las funciones son el estándar moderno) que aceptan entradas (llamadas props) y devuelven elementos React que describen qué debe aparecer en la pantalla.
+
+Componente Funcional (Recomendado):
+
+  ```jsx
+  // src/components/Saludo.jsx
+  import React from 'react'; // Necesario si usas JSX que se transpila a 
+  React.createElement
+
+  function Saludo(props) {
+  // props es un objeto que contiene los datos pasados al componente
+  // Ejemplo de uso de props: props.nombre
+  return <h1>¡Hola, {props.nombre}!</h1>;
+  }
+
+  export default Saludo; // Exporta el componente para poder usarlo en otros archivos
+  ```
+Uso del componente:
+
+  ```jsx
+  // src/App.jsx
+import React from 'react';
+import Saludo from './components/Saludo'; // Importa el componente
+import './App.css';
+
+function App() {
+  return (
+    <div>
+      {/* Usa el componente como una etiqueta HTML */}
+      <Saludo nombre="Ana" />
+      <Saludo nombre="Carlos" />
+    </div>
+  );
+}
+
+export default App;
+  ```
+## Props (Propiedades)
+
+Las `props` (abreviatura de properties) son la forma de pasar datos de un componente padre a un componente hijo. Son de solo lectura dentro del componente hijo (el hijo no debe modificar las props que recibe).
+
+En el ejemplo anterior, `nombre` es una prop pasada desde `App` al componente `Saludo`.
+
+## State (Estado)
+
+Mientras que las `props` son datos pasados desde fuera, el `state` (estado) es información que un componente gestiona internamente y que puede cambiar con el tiempo, generalmente en respuesta a acciones del usuario o eventos de red. Cuando el estado de un componente cambia, React vuelve a renderizar ese componente.
+
+En componentes funcionales, el estado se gestiona usando el Hook `useState`.
+
+  ```jsx
+// src/components/Contador.jsx
+import React, { useState } from 'react'; // Importa useState
+
+function Contador() {
+  // Declara una variable de estado llamada 'conteo' y una función 'setConteo' para actualizarla.
+  // El valor inicial es 0.
+  const [conteo, setConteo] = useState(0);
+
+  const incrementar = () => {
+    setConteo(conteo + 1); // Actualiza el estado, causando un nuevo renderizado
+  };
+
+  return (
+    <div>
+      <p>Has hecho click {conteo} veces</p>
+      <button onClick={incrementar}>
+        Haz Click
+      </button>
+    </div>
+  );
+}
+
+export default Contador;
+  ```
+Cómo usarlo en `App.jsx`:
+
+  ```jsx
+// src/App.jsx
+import React from 'react';
+import Saludo from './components/Saludo';
+import Contador from './components/Contador'; // Importa el nuevo componente
+import './App.css';
+
+function App() {
+  return (
+    <div>
+      <Saludo nombre="Visitante" />
+      <hr />
+      <Contador /> {/* Añade el componente Contador */}
+    </div>
+  );
+}
+
+export default App;
+  ```
+
+## Ejecutando la Aplicación
+
+Dentro de la carpeta de tu proyecto (`mi-primera-app`), ejecuta:
+
+* Usando npm
+
+  ```bash
+  npm run dev
+  ```
+
+  * Usando yarn:
+
+  ```bash
+  yarn dev
+  ```
+
+Esto iniciará el servidor de desarrollo de Vite. Abrirá automáticamente tu aplicación en el navegador (normalmente en `http://localhost:3000` o un puerto similar). ¡Lo mejor de Vite es que los cambios que hagas en el código se reflejarán casi instantáneamente en el navegador gracias al Hot Module Replacement (HMR)!
+
+## Próximos Pasos
+
+Ahora puedes explorar más a fondo:
+
+* **Hooks de React**:Aprende sobre otros Hooks importantes como `useEffect` (para efectos secundarios como llamadas a API), `useContext` (para compartir estado globalmente), `useRef`, etc.
+  
+* **Renderizado Condicional**: Mostrar u ocultar elementos basados en el estado o las props.
+  
+* **Listas y Keys**: Renderizar listas de datos de forma eficiente usando `.map()` y el atributo `key`.
+
+* **Manejo de Formularios**: Capturar y gestionar la entrada del usuario.
+
+* **Enrutamiento**: Usar bibliotecas como `react-router-dom` para crear aplicaciones con múltiples páginas/vistas.
+
+* **Gestión de Estado Avanzada**: Explorar soluciones como Context API (con `useReducer`), Zustand, Redux Toolkit, etc., para aplicaciones más complejas.
+
+* **Estilizado en React**: CSS Modules, Styled Components, Tailwind CSS, etc.
+
+* **Llamadas a APIs**: Interactuar con servidores backend para obtener o enviar datos (`Workspace`, `axios`).
+
+* **Testing**: Escribir pruebas para tus componentes (Jest, React Testing Library).
+
+* **Explora la Documentación Oficial de React**: [la documentación de React](https://react.dev) - Es un recurso excelente y actualizado.
+  
